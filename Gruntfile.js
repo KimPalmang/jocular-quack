@@ -8,12 +8,22 @@ module.exports = function(grunt){
     },
     copy: {
       libs: {
-        src: 'src/assets/libs/**',
+        expand: true,
+        cwd: 'src/assets/libs/',
+        src: '**',
         dest: '<%= dirs.output %> /libs/'
       },
       js: {
-        src: 'src/assets/js/**',
+        expand: true,
+        cwd: 'src/assets/js/',
+        src: '**',
         dest: '<%= dirs.output %> /js/'
+      },
+      html: {
+        expand: true,
+        cwd: 'src/',
+        src: '**/*.html',
+        dest: '<%= dirs.output %>'
       }
       // main: {
       //   files: [
@@ -76,6 +86,6 @@ module.exports = function(grunt){
 
   //register tasks
   //grunt.registerTask('copy', 'Copy all files task', []);
-  grunt.registerTask('default', 'Grunt default task', ["copy:libs"]);
+  grunt.registerTask('default', 'Grunt default task', ["copy"]);
 
 };

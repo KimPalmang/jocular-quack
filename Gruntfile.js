@@ -10,6 +10,7 @@ module.exports = function(grunt){
       prod: {
         files: [
           {
+            expand: true,
             cwd: 'src/assets/libs/',
             src: '**',
             dest: '<%= dirs.output %> /libs/'

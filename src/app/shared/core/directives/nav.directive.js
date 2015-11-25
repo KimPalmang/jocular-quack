@@ -2,13 +2,13 @@
   'use strict';
   angular
       .module('app')
-      .directive('headerDirective', headerDirective);
+      .directive('mainNav', mainNav);
 
-  function headerDirective() {
-    console.log('headerDirective loaded');
+  function mainNav() {
+    console.log('mainNav loaded');
       var directive = {
           link: link,
-          templateUrl: 'headerView.html',
+          templateUrl: './app/shared/core/views/navView.html',
           restrict: 'EA'
       };
       return directive;

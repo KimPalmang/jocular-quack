@@ -5,20 +5,20 @@
     .module('app')
     .config(routeConfig);
 
-  function routeConfig($routeProvider) {
+  function routeConfig($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'app/home/homeView.html',
         controller: 'HomeController',
-        controllerAs: 'ctrl'
       })
       .when('/about', {
         templateUrl: 'app/about/aboutView.html',
-        controller: 'AboutController',
-        controllerAs: 'ctrl'
+        controller: 'AboutController'
       })
       .otherwise({
         redirectTo: '/'
       });
+      // configure html5 to get links working on jsfiddle
+      $locationProvider.html5Mode({enabled: true, requireBase: false});
   }
 })();

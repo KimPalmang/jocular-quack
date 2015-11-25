@@ -2,15 +2,16 @@
   'use strict';
   angular
       .module('app')
-      .directive('footerDirective', footerDirective);
+      .directive('pageHeader', pageHeader);
 
-  function footerDirective() {
-    console.log('footerDirective loaded');
+  function pageHeader() {
+    console.log('page-header loaded');
       var directive = {
           link: link,
-          templateUrl: 'footerView.html',
+          templateUrl: './app/shared/core/views/headerView.html',
           restrict: 'EA'
       };
+      console.log(directive);
       return directive;
 
       function link(scope, element, attrs) {

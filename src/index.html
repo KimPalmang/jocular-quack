@@ -8,12 +8,23 @@
   </head>
   <body>
     <!-- header -->
+    <page-header></page-header>
     <!-- nav -->
+    <main-nav></main-nav>
     <!-- content -->
+    <div ng-view></div>
     <!-- footer -->
-
+    <page-footer></page-footer>
     <!-- scripts -->
-    <script src="assets/libs/vendor.js"></script>
+    <script src="assets/libs/angular.js"></script>
+    <script src="assets/libs/angular-route.js"></script>
     <script src="app/app.js"></script>
+
+    <script src="app/about/about.controller.js"></script>
+    <script src="app/home/home.controller.js"></script>
+
+    <script src="app/shared/core/directives/header.directive.js"></script>
+    <script src="app/shared/core/directives/footer.directive.js"></script>
+    <script src="app/shared/core/directives/nav.directive.js"></script>
   </body>
 </html>

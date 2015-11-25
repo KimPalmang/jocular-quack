@@ -57,13 +57,13 @@ module.exports = function(grunt){
       prod: { //production
         expand: true,
         cwd: 'src/',
-        src: ['**', '!**/sass/**', '!**/assets/libs/*.js', '!**/app/*.js'],
+        src: ['**', '!**/sass/**', '!**/app/*.js'],
         dest: 'prod/'
       },
       dev: {
         expand: true,
         cwd: 'src/',
-        src: ['**', '!**/sass/**', '!**/assets/libs/*.js', '!**/app/*.js'],
+        src: ['**', '!**/sass/**', '!**/app/*.js'],
         dest: 'dev/'
       }
     },
@@ -83,14 +83,14 @@ module.exports = function(grunt){
           'prod/app/shared/core/navigation/navigation.directive.js': 'prod/app/shared/core/navigation/navigation.directive.js',
           'prod/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
 
-          'prod/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
+          //'prod/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
           'prod/assets/js/main.js': 'prod/assets/js/*.js'
         },
       },
       dev: {
         files: {
           'dev/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
-          'dev/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
+          //'dev/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
           'dev/assets/js/main.js': 'dev/assets/js/*.js'
         },
         options: {
@@ -126,13 +126,15 @@ module.exports = function(grunt){
       prod: {
         options: {
           port: 8000,
-          base: './prod'
+          base: './prod',
+          open: true
         }
       },
       dev: {
         options: {
           port: 8080,
-          base: './dev'
+          base: './dev',
+          open: true
         }
       }
     }

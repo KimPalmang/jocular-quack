@@ -2,13 +2,13 @@
   'use strict';
   angular
       .module('app')
-      .directive('navigationDirective', navigationDirective);
+      .directive('pageFooter', pageFooter);
 
-  function navigationDirective() {
-    console.log('navigationDirective loaded');
+  function pageFooter() {
+    console.log('pageFooter loaded');
       var directive = {
           link: link,
-          templateUrl: 'navigationView.html',
+          templateUrl: './app/shared/core/views/footerView.html',
           restrict: 'EA'
       };
       return directive;

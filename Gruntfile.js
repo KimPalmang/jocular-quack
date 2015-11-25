@@ -1,57 +1,70 @@
 module.exports = function(grunt){
 
-  // var _ = require('lodash');
-  //var jshintStylish = require('jshint-stylish');
+  //require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    copy: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: 'src/',
-          src: ['**/*.html', '!index.html'],
-          dest: 'dist/app/views/',
-          flatten: true,
-          filter: 'isFile'
-        },{
-          expand: true,
-          cwd: 'src/',
-          src: ['!**/*.html', 'index.html'],
-          dest: 'dist/',
-          flatten: true,
-          filter: 'isFile'
-        }]
-      },
-      dev: {
-        files: [{
-          expand: true,
-          cwd: 'src/',
-          src: ['**/*.html', '!index.html'],
-          dest: 'dev/app/views/',
-          flatten: true,
-          filter: 'isFile'
-        },{
-          expand: true,
-          cwd: 'src/',
-          src: ['!**/*.html', 'index.html'],
-          dest: 'dev/',
-          flatten: true,
-          filter: 'isFile'
-        }]
-      }
-
-    },
+    // Hint the JS files
     jshint: {
       options: {
         reporter: 'node_modules/jshint-stylish',
       },
-      target:{
+      target: {
         files: {
-          src:
-          ['Gruntfile.js', 'src/**/*.js', '!src/assets/libs/*.js']
+          src: ['Gruntfile.js', 'src/**/*.js', '!src/assets/libs/*.js']
         }
+      }
+    },
+    // watch for changes
+    watch: {
+      js: {
+        files: 'src/**/*.js',
+        tasks: ['jshint', 'uglify:dev'],
+        options: {
+          livereload: true
+        },
+      },
+      sass: {
+        files: 'src/**/*.scss',
+        task: 'sass',
+        options: {
+          livereload: true
+        },
+      },
+      html: {
+        files: 'src/**/*.html',
+        options: {
+          livereload: true
+        },
+      }
+    },
+    // Clean the builds
+    clean: {
+      options: {
+        force: true
+      },
+      dev: {
+        src: ['dev']
+      },
+      prod: {
+        src: ['prod']
+      }
+    },
+
+    //copy all files
+    copy: {
+      prod: { //production
+        expand: true,
+        cwd: 'src/',
+        src: ['**', '!**/sass/**', '!**/assets/libs/*.js', '!**/app/*.js'],
+        dest: 'prod/'
+      },
+      dev: {
+        expand: true,
+        cwd: 'src/',
+        src: ['**', '!**/sass/**', '!**/assets/libs/*.js', '!**/app/*.js'],
+        dest: 'dev/'
       }
     },
 
@@ -60,28 +73,25 @@ module.exports = function(grunt){
         banner: '/*\n <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n*/\n',
         mangle: false
       },
-      dist: {
+      prod: {
         files: {
-          'dist/js/main.js': ['src/assets/js/*.js'],
-          //angular
-          'dist/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
-          'dist/app/js/controllers.js': 'src/app/**/*.controller.js',
-          'dist/app/js/factories.js': 'src/app/**/*.factory.js',
-          'dist/app/js/directives.js': 'src/app/**/*.directive.js',
+          'prod/app/about/about.controller.js': 'prod/app/about/about.controller.js',
+          'prod/app/about/about.factory.js': 'prod/app/about/about.factory.js',
+          'prod/app/home/home.controller.js': 'prod/app/home/home.controller.js',
+          'prod/app/shared/core/footer/footer.directive.js': 'prod/app/shared/core/footer/footer.directive.js',
+          'prod/app/shared/core/footer/header.directive.js': 'prod/app/shared/core/header/header.directive.js',
+          'prod/app/shared/core/navigation/navigation.directive.js': 'prod/app/shared/core/navigation/navigation.directive.js',
+          'prod/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
 
-          'dist/libs/vendor.js': 'src/assets/libs/*.js'
+          'prod/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
+          'prod/assets/js/main.js': 'prod/assets/js/*.js'
         },
       },
       dev: {
         files: {
-          'dev/js/main.js': 'src/assets/js/*.js',
-          //angular
           'dev/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
-          'dev/app/js/controllers.js': 'src/app/**/*.controller.js',
-          'dev/app/js/factories.js': 'src/app/**/*.factory.js',
-          'dev/app/js/directives.js': 'src/app/**/*.directive.js',
-
-          'dev/libs/vendor.js': 'src/assets/libs/*.js'
+          'dev/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
+          'dev/assets/js/main.js': 'dev/assets/js/*.js'
         },
         options: {
           beautify: {
@@ -93,12 +103,12 @@ module.exports = function(grunt){
     },
 
     sass: {
-      dist: {
+      prod: {
         options: {
           style: 'compressed'
         },
         files: {
-          'dist/css/style.css': 'src/assets/sass/base.scss',
+          'prod/assets/css/style.css': 'src/assets/sass/base.scss',
         }
       },
       dev: {
@@ -106,28 +116,24 @@ module.exports = function(grunt){
           style: 'expanded'
         },
         files: {
-          'dev/css/style.css': 'src/assets/sass/base.scss',
+          'dev/assets/css/style.css': 'src/assets/sass/base.scss',
         }
       }
     },
 
-    watch: {
-      javascript: {
-        files: 'src/**/*.js',
-        tasks: ['jshint', 'uglify']
+    //connect to the Server
+    connect: {
+      prod: {
+        options: {
+          port: 8000,
+          base: './prod'
+        }
       },
-      sass: {
-        files: 'src/**/*.scss',
-        task: 'sass'
-      }
-    },
-
-    clean: {
       dev: {
-        src: ['dev']
-      },
-      dist: {
-        src: ['dist']
+        options: {
+          port: 8080,
+          base: './dev'
+        }
       }
     }
   });
@@ -135,21 +141,25 @@ module.exports = function(grunt){
   //load dependencies
 
   grunt.loadNpmTasks('grunt-contrib-jshint');   // JS hinting
-  grunt.loadNpmTasks('grunt-contrib-uglify');   // Minify js
-  grunt.loadNpmTasks('grunt-contrib-sass');     // Sass
   grunt.loadNpmTasks('grunt-contrib-watch');    // Watch for changes
   grunt.loadNpmTasks('grunt-contrib-clean');    // Clean the builds
+
+  grunt.loadNpmTasks('grunt-contrib-copy');     // Copy html files
+  grunt.loadNpmTasks('grunt-contrib-uglify');   // Minify js
+  grunt.loadNpmTasks('grunt-contrib-sass');     // Sass compile
+
   grunt.loadNpmTasks('grunt-contrib-connect');  // Server
+
   // grunt.loadNpmTasks('grunt-contrib-qunit');
   // grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-copy');     // Copy html files
+
 
   //register tasks
-  grunt.registerTask('dev', 'development build', ["copy:dev", "jshint", "uglify:dev", "sass:dev"]);
-  grunt.registerTask('dist', 'Grunt distrubution task', ["uglify:dist", "sass:dist", "copy:dist"]);
+  grunt.registerTask('dev', 'development build', ["copy:dev", "jshint", "uglify:dev", "sass:dev", "connect:dev", "watch"]);
+  grunt.registerTask('prod', 'Grunt production task', ["copy:prod", "uglify:prod", "sass:prod"]);
 
   grunt.registerTask('clean-dev', 'cleanup for dev', ["clean:dev"]);
-  grunt.registerTask('clean-dist', 'cleanup for dist', ["clean:dist"]);
+  grunt.registerTask('clean-prod', 'cleanup for prod', ["clean:prod"]);
   grunt.registerTask('clean-all', 'clean all builds', ["clean"]);
 
   grunt.registerTask('default', 'Default task', []);

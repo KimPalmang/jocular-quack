@@ -37,6 +37,7 @@
     "http-proxy": "^1.12.0",
     "jshint-stylish": "^2.1.0",
     "lodash": "^3.10.1",
+    "matchdep": "^1.0.0",
     "path": "^0.12.7"
   },
   "scripts": {

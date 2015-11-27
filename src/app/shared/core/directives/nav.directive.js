@@ -14,7 +14,7 @@
       return directive;
 
       function link(scope, element, attrs) {
-        console.log('function link loaded');
+        console.log('function nav-link loaded');
       }
   }
 })();

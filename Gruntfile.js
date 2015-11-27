@@ -12,7 +12,7 @@ module.exports = function(grunt){
       },
       target: {
         files: {
-          src: ['Gruntfile.js', 'src/**/*.js', '!src/assets/libs/*.js']
+          src: ['Gruntfile.js', 'src/**/*.js', '!src/assets/libs/*.js', '!**/tests/components/**']
         }
       }
     },
@@ -57,13 +57,13 @@ module.exports = function(grunt){
       prod: { //production
         expand: true,
         cwd: 'src/',
-        src: ['**', '!**/sass/**', '!**/app/*.js'],
+        src: ['**', '!**/sass/**', '!**/app/*.js', '!src/**/*.tests.js'],
         dest: 'prod/'
       },
       dev: {
         expand: true,
         cwd: 'src/',
-        src: ['**', '!**/sass/**', '!**/app/*.js'],
+        src: ['**', '!**/sass/**', '!**/app/*.js', '!src/**/*.tests.js'],
         dest: 'dev/'
       }
     },
@@ -83,14 +83,12 @@ module.exports = function(grunt){
           'prod/app/shared/core/navigation/navigation.directive.js': 'prod/app/shared/core/navigation/navigation.directive.js',
           'prod/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
 
-          //'prod/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
           'prod/assets/js/main.js': 'prod/assets/js/*.js'
         },
       },
       dev: {
         files: {
           'dev/app/app.js': ['src/app/app.module.js', 'src/app/app.routes.js'],
-          //'dev/assets/libs/vendor.js': ['src/assets/libs/angular.js', 'src/assets/lib/angular-route.js'],
           'dev/assets/js/main.js': 'dev/assets/js/*.js'
         },
         options: {
@@ -137,11 +135,30 @@ module.exports = function(grunt){
           open: true
         }
       }
+    },
+    karma: {
+      unit: {
+        options: {
+          frameworks: ['jasmine'],
+          singleRun: true,
+          browsers: ['PhantomJS'],
+          files: [
+            'src/assets/libs/angular.js',
+            'src/assets/libs/angular-route.js',
+            'src/tests/components/angular-mocks.js',
+            'src/app/app.module.js',
+            'src/app/app.routes.js',
+            'src/app/about/*.js',
+            'src/app/home/*.js',
+            'src/app/shared/**/*.js',
+            'src/**/*.test.js',
+          ],
+        }
+      }
     }
   });
 
   //load dependencies
-
   grunt.loadNpmTasks('grunt-contrib-jshint');   // JS hinting
   grunt.loadNpmTasks('grunt-contrib-watch');    // Watch for changes
   grunt.loadNpmTasks('grunt-contrib-clean');    // Clean the builds
@@ -152,8 +169,8 @@ module.exports = function(grunt){
 
   grunt.loadNpmTasks('grunt-contrib-connect');  // Server
 
-  // grunt.loadNpmTasks('grunt-contrib-qunit');
-  // grunt.loadNpmTasks('grunt-contrib-concat');
+  //test
+  grunt.loadNpmTasks('grunt-karma');
 
 
   //register tasks
@@ -163,6 +180,10 @@ module.exports = function(grunt){
   grunt.registerTask('clean-dev', 'cleanup for dev', ["clean:dev"]);
   grunt.registerTask('clean-prod', 'cleanup for prod', ["clean:prod"]);
   grunt.registerTask('clean-all', 'clean all builds', ["clean"]);
+
+
+
+  grunt.registerTask('test', ["jshint","karma"]);
 
   grunt.registerTask('default', 'Default task', []);
 
